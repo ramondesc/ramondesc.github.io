@@ -1,0 +1,93 @@
+
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+ <channel>
+   <title>Tags on Mon</title>
+   <link>http://mon.codes/tags/</link>
+   <description>Recent content in Tags on Mon</description>
+   <generator>Hugo -- gohugo.io</generator>
+   <language>en-us</language>
+   
+       <atom:link href="http://mon.codes/tags/index.xml" rel="self" type="application/rss+xml" />
+   
+   
+     <item>
+       <title>Adicionando uma splash screen em um aplicativo Android</title>
+       <link>http://mon.codes/posts/splash-screen-android/</link>
+       <pubDate>Mon, 30 Mar 2020 00:46:37 -0300</pubDate>
+       
+       <guid>http://mon.codes/posts/splash-screen-android/</guid>
+       <description>&lt;figure&gt;
+    &lt;img src=&#34;http://mon.codes/photo-1585060544812-6b45742d762f.webp&#34;
+         alt=&#34;Celular com tela em branco.&#34;/&gt; &lt;figcaption&gt;
+            &lt;h4&gt;Quando você vê esta tela, o que acha que está acontecendo? Está carregando? Travou? O que você faria?&lt;/h4&gt;
+        &lt;/figcaption&gt;
+&lt;/figure&gt;
+
+&lt;p&gt;Quando criamos aplicativos mobile, precisamos fazer com que as pessoas sintam que estão no controle o tempo todo. Caso você entregue uma tela em branco padrão, eles podem supor que sua aplicação travou.&lt;/p&gt;
+&lt;p&gt;Minha primeira tentativa de desenvolver aplicações mobile foi com o Flutter. Enquanto pesquisava e aprendia a linguagem encontrei  este &lt;a href=&#34;https://pub.dartlang.org/packages/splashscreen&#34;&gt;package de Dart&lt;/a&gt;. Mas isto é uma route executada antes de aplicação mostrar sua tela principal. Ele pode ser útil caso você queira entregar uma distração positiva ao usuário enquanto carrega o aplicativo. Mas a tela branca continua logo após abrir o aplicativo.&lt;/p&gt;
+&lt;p&gt;Para definir uma splash screen no Android, é necessário criar nativamente.&lt;/p&gt;
+&lt;p&gt;Primeiro, precisamos ir ao arquivo manifesto. Ele contém informações utilizadas pelo sistemas antes da aplicação executar seu código nativo.&lt;/p&gt;
+&lt;p&gt;Em &lt;strong&gt;android/src/main/AndroidManifest.xml&lt;/strong&gt; há uma activity com o seguinte atributo:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-xml&#34; data-lang=&#34;xml&#34;&gt; android:theme=&amp;#34;@style/LaunchTheme&amp;#34;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;O LaunchTheme é encontrado em &lt;strong&gt;android/src/main/res/values/styles.xml&lt;/strong&gt;:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-xml&#34; data-lang=&#34;xml&#34;&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&amp;lt;?xml version=&amp;#34;1.0&amp;#34; encoding=&amp;#34;utf-8&amp;#34;?&amp;gt;&lt;/span&gt;
+&lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;resources&amp;gt;&lt;/span&gt;
+    &lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;style&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;name=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;LaunchTheme&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;parent=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;@android:style/Theme.Black.NoTitleBar&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;&amp;gt;&lt;/span&gt;
+        &lt;span style=&#34;color:#75715e&#34;&gt;&amp;lt;!-- Show a splash screen on the activity. Automatically removed when
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;             Flutter draws its first frame --&amp;gt;&lt;/span&gt;
+        &lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;item&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;name=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;android:windowBackground&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;&amp;gt;&lt;/span&gt;@drawable/launch_background&lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;/item&amp;gt;&lt;/span&gt;
+    &lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;/style&amp;gt;&lt;/span&gt;
+&lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;/resources&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;E a tela em branco é encontrada em &lt;strong&gt;android/src/main/res/drawable/launch_background.xml&lt;/strong&gt;:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-xml&#34; data-lang=&#34;xml&#34;&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&amp;lt;?xml version=&amp;#34;1.0&amp;#34; encoding=&amp;#34;utf-8&amp;#34;?&amp;gt;&lt;/span&gt;
+&lt;span style=&#34;color:#75715e&#34;&gt;&amp;lt;!-- Modify this file to customize your launch splash screen --&amp;gt;&lt;/span&gt;
+&lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;layer-list&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;xmlns:android=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;http://schemas.android.com/apk/res/android&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;&amp;gt;&lt;/span&gt;
+    &lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;item&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;android:drawable=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;@android:color/white&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;/&amp;gt;&lt;/span&gt;
+
+    &lt;span style=&#34;color:#75715e&#34;&gt;&amp;lt;!-- You can insert your own image assets here --&amp;gt;&lt;/span&gt;
+    &lt;span style=&#34;color:#75715e&#34;&gt;&amp;lt;!-- &amp;lt;item&amp;gt;
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;        &amp;lt;bitmap
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;            android:gravity=&amp;#34;center&amp;#34;
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;            android:src=&amp;#34;@mipmap/launch_image&amp;#34; /&amp;gt;
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;    &amp;lt;/item&amp;gt; --&amp;gt;&lt;/span&gt;
+&lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;/layer-list&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Agora é necessário adicionarmos a imagem para o endereço de origem. Substitua o launch_image pelo nome da imagem sem a extensão. O resultado será a imagem centralizada na tela com o restante preenchido na cor branca.&lt;/p&gt;
+&lt;p&gt;Eu necessitava de uma maneira de preencher a tela com uma cor de fundo igual ao da imagem. A solução que encontrei foi editar o item para apontar uma cor diferente. O código final ficou assim:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-xml&#34; data-lang=&#34;xml&#34;&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&amp;lt;?xml version=&amp;#34;1.0&amp;#34; encoding=&amp;#34;utf-8&amp;#34;?&amp;gt;&lt;/span&gt;
+&lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;layer-list&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;xmlns:android=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;http://schemas.android.com/apk/res/android&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;&amp;gt;&lt;/span&gt;
+
+    &lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;item&amp;gt;&lt;/span&gt;
+        &lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;color&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;android:color=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;#93aeff&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;&amp;gt;&amp;lt;/color&amp;gt;&lt;/span&gt;
+    &lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;/item&amp;gt;&lt;/span&gt;
+
+    &lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;item&amp;gt;&lt;/span&gt;
+        &lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;bitmap&lt;/span&gt;
+            &lt;span style=&#34;color:#a6e22e&#34;&gt;android:layout_width=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;wrap_content&amp;#34;&lt;/span&gt;
+            &lt;span style=&#34;color:#a6e22e&#34;&gt;android:layout_height=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;wrap_content&amp;#34;&lt;/span&gt;
+            &lt;span style=&#34;color:#a6e22e&#34;&gt;android:layout_gravity=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;center&amp;#34;&lt;/span&gt;
+            &lt;span style=&#34;color:#a6e22e&#34;&gt;android:gravity=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;center&amp;#34;&lt;/span&gt;
+            &lt;span style=&#34;color:#a6e22e&#34;&gt;android:src=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;@drawable/launch_image&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;/&amp;gt;&lt;/span&gt;
+    &lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;/item&amp;gt;&lt;/span&gt;
+
+&lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;/layer-list&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;E o resultado visual foi:&lt;/p&gt;
+&lt;figure&gt;
+    &lt;img src=&#34;http://mon.codes/145649.webp&#34;
+         alt=&#34;Uma ilustração de pessoas sobre aviões de papel. O plano de fundo é uniforme com uma mesma cor.&#34;/&gt; 
+&lt;/figure&gt;
+
+&lt;p&gt;Obrigado por ler até o final. Caso eu tenha cometido qualquer erro, avise-me.&lt;/p&gt;
+&lt;h2 id=&#34;referências&#34;&gt;Referências&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://android.jlelse.eu/right-way-to-create-splash-screen-on-android-e7f1709ba154&#34;&gt;Right Way to Create Splash Screen on Android&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;imagens&#34;&gt;Imagens&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.freepik.com/free-vector/leadership-concept-paper-planes_3165533.htm&#34;&gt;Business vector created by freepik - www.freepik.com&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://images.pexels.com/photos/336948/pexels-photo-336948.jpeg?auto=compress&amp;amp;cs=tinysrgb&amp;amp;h=650&amp;amp;w=940&#34;&gt;Blank phone screen by Pexels&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+     </item>
+   
+ </channel>
+</rss>
